@@ -3,42 +3,46 @@ package uz.steam_learning.models;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedBy;
 
 import java.sql.Timestamp;
 
 @Entity
 public class Users {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
-    private String passwordHash;
+    @Column(nullable = false)
+    private String password;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    private String status = "active";
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name = "created_at", updatable = false)
     private Timestamp createdAt;
+
     @UpdateTimestamp
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
-
-
-    public Users(Long id, String fullName, String email, String passwordHash, Role role, String status, Timestamp createdAt, Timestamp updatedAt) {
+    public Users(Long id, String fullName, String email, String password, Role role, UserStatus status, Timestamp createdAt, Timestamp updatedAt) {
         this.id = id;
         this.fullName = fullName;
         this.email = email;
-        this.passwordHash = passwordHash;
+        this.password = password;
         this.role = role;
         this.status = status;
         this.createdAt = createdAt;
@@ -48,6 +52,8 @@ public class Users {
     public Users() {
 
     }
+
+    // Getters va Setters
 
     public Long getId() {
         return id;
@@ -73,12 +79,12 @@ public class Users {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Role getRole() {
@@ -89,11 +95,11 @@ public class Users {
         this.role = role;
     }
 
-    public String getStatus() {
+    public UserStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(UserStatus status) {
         this.status = status;
     }
 
@@ -101,9 +107,7 @@ public class Users {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
-        this.createdAt = createdAt;
-    }
+    // setCreatedAt odatda kerak emas, shuning uchun olib tashlandi
 
     public Timestamp getUpdatedAt() {
         return updatedAt;

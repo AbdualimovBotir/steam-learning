@@ -8,19 +8,27 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String roleName;
+    @Enumerated(EnumType.STRING)
+    @Column(unique = true, nullable = false)
+    private UserRole roleName;
 
     private String description;
 
-    public Role(Long id, String roleName, String description) {
-        this.id = id;
+    public Role(UserRole roleName, String description) {
         this.roleName = roleName;
         this.description = description;
     }
 
-    public Role() {
 
+    public Role() {
+    }
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", roleName=" + roleName +
+                ", description='" + description + '\'' +
+                '}';
     }
 
     public Long getId() {
@@ -31,11 +39,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getRoleName() {
+    public UserRole getRoleName() {
         return roleName;
     }
 
-    public void setRoleName(String roleName) {
+    public void setRoleName(UserRole roleName) {
         this.roleName = roleName;
     }
 
